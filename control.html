@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket demo</title>
+    </head>
+    <body>
+        <script>
+        	function sendval(val){
+            var ws = new WebSocket("ws://10.0.0.41:5555/ws")
+        		ws.onopen = function(event) {
+        			ws.send(val);
+        		}
+        	}
+            // ws.onopen = function(event) {
+	           //  ws.send(1000);
+            // }
+        </script>
+        <ul>
+            <li onmousedown="sendval(0.1)">0.1</li>
+            <li onmousedown="sendval(0.01)">0.01</li>
+            <li onmousedown="sendval(0.001)">0.001</li>
+            <li onmousedown="sendval(0.2)">0.2</li>
+            <li onmousedown="sendval(0.05)">0.05</li>
+            <li onmousedown="sendval(0.005)">0.005</li>
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+
+    <!-- Bootstrap core CSS -->
+
+  <link href="jquery-ui-1.12.1.custom/jquery-ui.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    
+
+    <!-- Page Content -->
+
+<h2 class="demoHeaders">Slider</h2>
+<div id="slider"></div>
+ 
+    <!-- Bootstrap core JavaScript -->
+
+<script src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+<script src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+  <script>
+
+$( "#slider" ).slider({
+  max: 0.01,
+  step: 0.0001,
+  value: 0.01, 
+  change: sendval  
+});
+function sendval(){
+            var value = "timing:"+$("#slider").slider("value");
+            console.log(value);
+            var ws = new WebSocket("ws://192.168.254.81:5555/ws");
+            ws.onopen = function(event) {
+              ws.send(value);
+            }
+          }
+
+</script>
+  </body>
+
+</html>
+ <script>
+          
+            // ws.onopen = function(event) {
+             //  ws.send(1000);
+            // }
+        </script>
