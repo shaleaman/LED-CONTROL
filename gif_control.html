@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+
+    <!-- Bootstrap core CSS -->
+
+  <link href="jquery-ui-1.12.1.custom/jquery-ui.css" rel="stylesheet">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<style>
+li {
+    height:0;
+}
+ul {
+    list-style-type: none;
+}
+</style>
+    <!-- Custom styles for this template -->
+
+
+  </head>
+    <body>
+        <div class="container">
+            <div class="col-md-9">
+                <ul>
+                    <li><a class="col-sm-3 thumbnail" href="#" onclick="send_gif('fire2.gif')"><img src="images/fire2.gif"></a></li>
+                    <li><a class="col-sm-3 thumbnail" href="#" onclick="send_gif('lightning.gif')"><img src="images/lightning.gif"></a></li>
+                    <li><a  class="col-sm-3 thumbnail" href="#" onclick="send_gif('space.gif')"><img src="images/space.gif"></a></li>
+                    <li><a class="col-sm-3 thumbnail" href="#"onclick="send_gif('Ey8fs1t.gif')"><img src="images/Ey8fs1t.gif"></a></li>
+                    <li><a class="col-sm-3 thumbnail" href="#"onclick="send_gif('color_2.gif')"><img src="images/color_2.gif"></a></li>
+                    <li><a class="col-sm-3 thumbnail" href="#"onclick="send_gif('colorwave.gif')"><img src="images/colorwave.gif"></a></li>
+                </ul>    
+            </div>
+        </div>
+
+<script src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+<script src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script>
+var host = location.hostname
+function send_gif(gif){
+    
+    console.log("SENDING GIF: "+gif);
+	var ws = new WebSocket("ws://"+host+":5555/ws");
+	ws.onopen = function(event) {
+		ws.send(gif);
+	}
+    }
+    </script>
+    </body>
+</html>
