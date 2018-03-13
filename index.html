@@ -8,6 +8,9 @@
 
   <link href="jquery-ui-1.12.1.custom/jquery-ui.css" rel="stylesheet">
 
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
     <!-- Custom styles for this template -->
 
 
@@ -19,30 +22,57 @@
     
 
     <!-- Page Content -->
+	<div class="container">
 
-<h2 class="demoHeaders">Slider</h2>
-<div id="slider"></div>
- 
+	<div class="col-md-8">
+		<div id="timing">
+		<h2 class="demoHeaders">LED Color Speed</h2><span id="display_value"></span>
+		<div id="slider"></div>
+		</div> <!-- timing -->
+		<div id="green_shift">
+		<h2 class="demoHeaders">Green Shift</h2><span id="display_value"></span>
+		<div id="slider"></div>
+		</div> <!-- green_shift -->
+	</div>	
+
+	</div>
     <!-- Bootstrap core JavaScript -->
 
 <script src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 <script src="jquery-ui-1.12.1.custom/jquery-ui.js"></script>
-  <script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script>
 
-$( "#slider" ).slider({
+
+$( "#timing #slider" ).slider({
   max: 0.01,
   step: 0.0001,
-  value: 0.01, 
+  value: 0.001, 
+  slide: function( event,ui ) {
+	  console.log($(ui.handle).parent().parent());
+	  $(ui.handle).parent().parent().children('value').html("HELLO");
+	  updateval(ui.value);
+  },
   change: sendval  
-});
+}).ready(updateval(this));
+
+
+function updateval(obj){
+	//console.log(obj);
+
+	//obj.target.parent().html($("#slider").slider("value"));
+}
 function sendval(){
-            var value = "timing:"+$("#slider").slider("value");
-            console.log(value);
-            var ws = new WebSocket("ws://192.168.254.81:5555/ws");
-            ws.onopen = function(event) {
-              ws.send(value);
-            }
-          }
+	var value = "timing:"+$("#slider").slider("value");
+	console.log(value);
+	var ws = new WebSocket("ws://192.168.254.81:5555/ws");
+	ws.onopen = function(event) {
+		ws.send(value);
+	}
+}
 
 </script>
   </body>
