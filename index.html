@@ -26,13 +26,25 @@
 
 	<div class="col-md-8">
 		<div id="timing">
-		<h2 class="demoHeaders">LED Color Speed</h2><span id="display_value"></span>
+		<h2 class="demoHeaders">LED Color Speed</h2><span id="display_value">100</span>
 		<div id="slider"></div>
 		</div> <!-- timing -->
-		<div id="green_shift">
+		<div id="green_offset">
 		<h2 class="demoHeaders">Green Shift</h2><span id="display_value"></span>
 		<div id="slider"></div>
-		</div> <!-- green_shift -->
+		</div> <!-- green_offset -->
+		<div id="red_offset">
+		<h2 class="demoHeaders">Blue Shift</h2><span id="display_value"></span>
+		<div id="slider"></div>
+		</div> <!-- Blue Shift -->
+		<div id="min_bright">
+		<h2 class="demoHeaders">Minimum Brightness</h2><span id="display_value"></span>
+		<div id="slider"></div>
+		</div> <!-- Min Brightness -->
+		<div id="max_bright">
+		<h2 class="demoHeaders">Maximum Brightness</h2><span id="display_value"></span>
+		<div id="slider"></div>
+		</div> <!-- green_offset -->
 	</div>	
 
 	</div>
@@ -46,33 +58,129 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script>
 
+//
+// class Slider_control {
+//     constructor(container) {
+//         this.container = container;
+//     
+//         
+//     $( "container #slider" ).slider({
+//       max: 0.01,
+//       step: 0.0001,
+//       value: 0.001, 
+//       slide: function( event,ui ) {
+//           $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
+//       },
+//       change: function (event, ui) {
+//         var value = $(this).slider('value');
+//         console.log("SENDING VALUE: "+value);
+//         var ws = new WebSocket("ws:/localhost:5555/ws");
+//         ws.onopen = function(event) {
+//             ws.send(value);
+//         }
+//       }
+//     });
+// }
+// }
+// const green_slider = new Slider_control('#green_offset');
+host = location.hostname
 
+function updateval(object){
+    object.slider('widget').parent().children("#display_value").html(object.slider('value'));
+    }
 $( "#timing #slider" ).slider({
   max: 0.01,
   step: 0.0001,
   value: 0.001, 
   slide: function( event,ui ) {
-	  console.log($(ui.handle).parent().parent());
-	  $(ui.handle).parent().parent().children('value').html("HELLO");
-	  updateval(ui.value);
+	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
   },
-  change: sendval  
-}).ready(updateval(this));
-
-
-function updateval(obj){
-	//console.log(obj);
-
-	//obj.target.parent().html($("#slider").slider("value"));
-}
-function sendval(){
-	var value = "timing:"+$("#slider").slider("value");
-	console.log(value);
-	var ws = new WebSocket("ws://192.168.254.81:5555/ws");
+  change: function (event, ui) {
+    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
+    console.log("SENDING VALUE: "+send_value);
+	var ws = new WebSocket("ws://"+host+":5555/ws");
 	ws.onopen = function(event) {
-		ws.send(value);
+		ws.send(send_value);
 	}
-}
+  }
+}).ready();
+
+$( "#green_offset #slider" ).slider({
+  max: 500,
+  step: 01,
+  value: 200, 
+  slide: function( event,ui ) {
+	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
+  },
+  change: function (event, ui) {
+    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
+    console.log("SENDING VALUE: "+send_value);
+	var ws = new WebSocket("ws://"+host+":5555/ws");
+	ws.onopen = function(event) {
+		ws.send(send_value);
+	}
+  }
+});
+
+$( "#red_offset #slider" ).slider({
+  max: 500,
+  step: 01,
+  value: 200, 
+  slide: function( event,ui ) {
+	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
+  },
+  change: function (event, ui) {
+    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
+    console.log("SENDING VALUE: "+send_value);
+	var ws = new WebSocket("ws://"+host+":5555/ws");
+	ws.onopen = function(event) {
+		ws.send(send_value);
+	}
+  }
+});
+
+$( "#min_bright #slider" ).slider({
+  max: 255, 
+  step: 1, 
+  value:255, 
+  slide: function( event,ui ) {
+	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
+  },
+  change: function (event, ui) {
+    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
+    console.log("SENDING VALUE: "+send_value);
+	var ws = new WebSocket("ws://"+host+":5555/ws");
+	ws.onopen = function(event) {
+		ws.send(send_value);
+	}
+  }
+});
+
+$( "#max_bright #slider" ).slider({
+  max: 255, 
+  step: 1, 
+  value:0,
+  slide: function( event,ui ) {
+	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
+  },
+  change: function (event, ui) {
+    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
+    console.log("SENDING VALUE: "+send_value);
+	var ws = new WebSocket("ws://"+host+":5555/ws");
+	ws.onopen = function(event) {
+		ws.send(send_value);
+	}
+  }
+});
+
+// function sendval(){
+// 	var value = "timing:"+$("#slider").slider("value");
+// 	console.log(value);
+// 	var ws = new WebSocket("ws://"+host+":5555/ws");
+// 	ws.onopen = function(event) {
+// 		ws.send(value);
+// 	}
+// }
 
 </script>
   </body>
