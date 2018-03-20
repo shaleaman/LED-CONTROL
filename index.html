@@ -12,7 +12,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
-
+	<style>
+		.slider_wrapper{
+			padding: 10px 0px 10px 0px;
+		}
+	</style>
 
   </head>
 
@@ -40,9 +44,9 @@
 		<div id="slider"></div>
 		</div> <!-- green_bright-->
 
-		<div id="blue_bright">
-		<h2 class="demoHeaders">Blue Brightness</h2><span id="display_value"></span>
-		<div id="slider"></div>
+		<div id="blue_bright" class="slider_wrapper">
+			<div  class="col-md-4 demoHeaders">Blue Brightness</div><div class="col-md-1" id="display_value"></div>
+		<div class="col-md-6" id="slider"></div>
 		</div> <!-- Blue Bright -->
 
 		<div id="red_offset">
@@ -70,6 +74,10 @@
 		<div id="slider"></div>
 		</div> <!-- Max Brightness -->
 
+		<div id="mag">
+		<h2 class="demoHeaders">Noise Magnification</h2><span id="display_value"></span>
+		<div id="slider"></div>
+		</div> <!-- mag -->
 	</div>	
 
 	</div>
@@ -87,166 +95,36 @@ host = location.hostname
 function updateval(object){
     object.slider('widget').parent().children("#display_value").html(object.slider('value'));
     }
-$( "#timing #slider" ).slider({
-  max: 0.01,
-  step: 0.0001,
-  value: 0.001, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-}).ready();
 
-$( "#red_bright #slider" ).slider({
-  max: 255,
-  step: 01,
-  value: 200, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
-$( "#green_bright #slider" ).slider({
-  max: 255,
-  step: 01,
-  value: 200, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
+function add_slider(name, max_val, step_val, value_val){
+	$( "#"+name+" #slider" ).slider({
+	  max: max_val,
+	  step: step_val,
+	  value: value_val, 
+	  slide: function( event,ui ) {
+		  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
+	  },
+	  change: function () {
+		var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
+		console.log("SENDING VALUE: "+send_value);
+		var ws = new WebSocket("ws://"+host+":5555/ws");
+		ws.onopen = function(event) {
+			ws.send(send_value);
+		}
+	  }
+	});
+}
 
-$( "#blue_bright #slider" ).slider({
-  max: 255,
-  step: 1,
-  value: 200, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
-
-$( "#red_offset #slider" ).slider({
-  max: 255,
-  step: 1,
-  value: 200, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
-
-$( "#green_offset #slider" ).slider({
-  max: 255,
-  step: 1,
-  value: 200, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
-
-$( "#blue_offset #slider" ).slider({
-  max: 255,
-  step: 1,
-  value: 200, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
-
-$( "#min_bright #slider" ).slider({
-  max: 1, 
-  step: 0.01, 
-  value: 1, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
-
-$( "#max_bright #slider" ).slider({
-  max: 1, 
-  step: 0.01, 
-  value: 1, 
-  slide: function( event,ui ) {
-	  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
-  },
-  change: function (event, ui) {
-    var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
-    console.log("SENDING VALUE: "+send_value);
-	var ws = new WebSocket("ws://"+host+":5555/ws");
-	ws.onopen = function(event) {
-		ws.send(send_value);
-	}
-  }
-});
-
-// function sendval(){
-// 	var value = "timing:"+$("#slider").slider("value");
-// 	console.log(value);
-// 	var ws = new WebSocket("ws://"+host+":5555/ws");
-// 	ws.onopen = function(event) {
-// 		ws.send(value);
-// 	}
-// }
+add_slider("timing", .01, .0001, .002);
+add_slider("red_bright", 255, 1, 255);
+add_slider("green_bright", 255, 1, 255);
+add_slider("blue_bright", 255, 1, 255);
+add_slider("red_offset", 1000, 1, 0);
+add_slider("green_offset", 1000, 1, 100);
+add_slider("blue_offset", 1000, 1, 200);
+add_slider("min_bright", 1, 0.01, 0);
+add_slider("max_bright", 1, 0.01, 1);
+add_slider("mag", 10, 0.1, 1);
 
 </script>
   </body>
