@@ -14,8 +14,14 @@
     <!-- Custom styles for this template -->
 	<style>
 		.slider_wrapper{
-			padding: 10px 0px 10px 0px;
+			padding: 15px 0px 15px 0px;
+			margin: auto;
+			vertical-align: center;
 		}
+		.demoHeaders{
+			font-size: 1.5em;
+			text-align: right;
+		}	
 	</style>
 
   </head>
@@ -28,56 +34,7 @@
     <!-- Page Content -->
 	<div class="container">
 
-	<div class="col-md-8">
-		<div id="timing">
-		<h2 class="demoHeaders">LED Color Speed</h2><span id="display_value">100</span>
-		<div id="slider"></div>
-		</div> <!-- timing -->
-
-		<div id="red_bright">
-		<h2 class="demoHeaders"> Red Brightness</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- red bright-->
-
-		<div id="green_bright">
-		<h2 class="demoHeaders">Green Brightness</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- green_bright-->
-
-		<div id="blue_bright" class="slider_wrapper">
-			<div  class="col-md-4 demoHeaders">Blue Brightness</div><div class="col-md-1" id="display_value"></div>
-		<div class="col-md-6" id="slider"></div>
-		</div> <!-- Blue Bright -->
-
-		<div id="red_offset">
-		<h2 class="demoHeaders"> Red Offset</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- red offset-->
-		
-		<div id="green_offset">
-		<h2 class="demoHeaders">Green Offset</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- green offset -->
-
-		<div id="blue_offset">
-		<h2 class="demoHeaders">Blue Offset</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- blue offset -->
-
-		<div id="min_bright">
-		<h2 class="demoHeaders">Minimum Brightness</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- Min Brightness -->
-
-		<div id="max_bright">
-		<h2 class="demoHeaders">Maximum Brightness</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- Max Brightness -->
-
-		<div id="mag">
-		<h2 class="demoHeaders">Noise Magnification</h2><span id="display_value"></span>
-		<div id="slider"></div>
-		</div> <!-- mag -->
+	<div id="slider_container" class="col-md-8">
 	</div>	
 
 	</div>
@@ -92,9 +49,17 @@
 <script>
 host = location.hostname
 
-function updateval(object){
-    object.slider('widget').parent().children("#display_value").html(object.slider('value'));
+function updateval(sname, svalue){
+	console.log(sname, svalue);
+	$('#'+sname+' > .display_value').html(svalue);
     }
+
+function add_slider_wrapper(name){
+	$("#slider_container").append(
+			`<div id="${name}" class="slider_wrapper row"><div  class="col-md-4 demoHeaders"> ${name} </div><div class="col-md-1 display_value"></div> <div class="col-md-6" id="slider"></div></div> <!-- ${name}  -->`
+		);
+	add_slider.apply(this, arguments);
+};
 
 function add_slider(name, max_val, step_val, value_val){
 	$( "#"+name+" #slider" ).slider({
@@ -102,29 +67,32 @@ function add_slider(name, max_val, step_val, value_val){
 	  step: step_val,
 	  value: value_val, 
 	  slide: function( event,ui ) {
-		  $(this).slider('widget').parent().children("#display_value").html($(this).slider('value'));
+		  $(this).slider('widget').parent().children(".display_value").html($(this).slider('value'));
 	  },
 	  change: function () {
 		var send_value = $(this).slider('widget').parent().attr('id')+ ":" + $(this).slider('value');
 		console.log("SENDING VALUE: "+send_value);
 		var ws = new WebSocket("ws://"+host+":5555/ws");
+	    $(this).slider('widget').parent().children(".display_value").html($(this).slider('value'));
 		ws.onopen = function(event) {
 			ws.send(send_value);
 		}
 	  }
+	}).ready( function(){
+		updateval(name, value_val);
 	});
 }
 
-add_slider("timing", .01, .0001, .002);
-add_slider("red_bright", 255, 1, 255);
-add_slider("green_bright", 255, 1, 255);
-add_slider("blue_bright", 255, 1, 255);
-add_slider("red_offset", 1000, 1, 0);
-add_slider("green_offset", 1000, 1, 100);
-add_slider("blue_offset", 1000, 1, 200);
-add_slider("min_bright", 1, 0.01, 0);
-add_slider("max_bright", 1, 0.01, 1);
-add_slider("mag", 10, 0.1, 1);
+add_slider_wrapper("timing", .01, .0001, .002);
+add_slider_wrapper("red_bright", 255, 1, 255);
+add_slider_wrapper("green_bright", 255, 1, 255);
+add_slider_wrapper("blue_bright", 255, 1, 255);
+add_slider_wrapper("red_offset", 1000, 1, 0);
+add_slider_wrapper("green_offset", 1000, 1, 100);
+add_slider_wrapper("blue_offset", 1000, 1, 200);
+add_slider_wrapper("min_bright", 1, 0.01, 0);
+add_slider_wrapper("max_bright", 1, 0.01, 1);
+add_slider_wrapper("mag", 10, 0.1, 1);
 
 </script>
   </body>
